@@ -3,11 +3,11 @@ using Player = System.Func<char[], int>;
 
 namespace TicTacToe;
 
-public class Program
+public static class Program
 {
     private const char nil = ' ';
     public record GameResult(char Winner, Board Board);
-    private record Game(Player CurrentPlayer, Player X, Player O, Board Board);
+    private record Game(char CurrentPlayer, Player X, Player O, Board Board);
     private static Board BlankBoard = [nil, nil, nil, nil, nil, nil, nil, nil, nil];
     private static IEnumerable<int[]> Lines = new Dictionary<string, int[][]>
     {
@@ -30,7 +30,7 @@ public class Program
 
     public static GameResult PlayTheGame(Player x, Player o, Board board = null)
         => PlayTheGame(new(
-                    x,
+                    'x',
                     x,
                     o,
                     board ?? BlankBoard));
@@ -45,22 +45,22 @@ public class Program
                         game.O,
                         GetBoardWithNextMove(game)));
 
-    private static Player GetOpponent(Game game)
-        => game.CurrentPlayer == game.O
-            ? game.X
-            : game.O;
+    private static char GetOpponent(Game game)
+        => game.CurrentPlayer == 'x'
+            ? 'o'
+            : 'x';
 
     private static Board GetBoardWithNextMove(Game game)
     {
-        var move = game.CurrentPlayer(game.Board);
-        game.Board[move] = GetCurrentSymbol(game);
+        var move = GetNextMove(game);
+        game.Board[move] = game.CurrentPlayer;
         return game.Board;
     }
 
-    private static char GetCurrentSymbol(Game game)
-        => game.CurrentPlayer == game.X
-            ? 'x'
-            : 'o';
+    private static int GetNextMove(Game game)
+        => game.CurrentPlayer == 'x'
+            ? game.X(game.Board)
+            : game.O(game.Board);
 
     public static IEnumerable<int> AllPossibleMoves(Board board)
     {
