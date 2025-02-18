@@ -2,7 +2,7 @@
 
 Goal: Build a simple Tic Tac Toe program
 
-- [ ] Text-based UI
-- [ ] Play by the rules
+- [x] Text-based UI
+- [x] Play by the rules
 - [ ] Unbeatable bot
-- [ ] Have fun!
+- [x] Have fun!

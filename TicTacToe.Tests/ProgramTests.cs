@@ -215,4 +215,32 @@ public class ProgramTests
             Assert.True(Program.IsCatsGame(CatsBoard));
         }
     }
+
+    public class IsValidInput
+    {
+        [Fact]
+        public void bad_input_is_not_valid()
+        {
+            Assert.False(Program.IsValidInput("", [1]));
+            Assert.False(Program.IsValidInput("letters", [1]));
+            Assert.False(Program.IsValidInput("4", [1]));
+        }
+
+        [Fact]
+        public void input_one_larger_than_a_possible_move_is_valid()
+        {
+            Assert.True(Program.IsValidInput("2", [1]));
+        }
+    }
+
+    public class RandomBot
+    {
+        [Fact]
+        public void chooses_a_valid_move()
+        {
+            var move = Program.RandomBot(PartialBoard);
+
+            Assert.Contains(move, Program.AllPossibleMoves(PartialBoard));
+        }
+    }
 }

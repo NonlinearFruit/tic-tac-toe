@@ -18,7 +18,14 @@ public class Program
 
     public static void Main(string[] args)
     {
-        Console.WriteLine("Hi");
+        Console.WriteLine("Tic Tac Toe");
+        Console.WriteLine(" <<press enter to start>>");
+        Console.ReadLine();
+        Console.Clear();
+        var result = PlayTheGame(HumanPlayer, RandomBot);
+        Console.Clear();
+        Print(result.Board);
+        Console.WriteLine($"Winner: {result.Winner}");
     }
 
     public static GameResult PlayTheGame(Player x, Player o, Board board = null)
@@ -82,6 +89,45 @@ public class Program
     public static bool IsCatsGame(Board board)
         => IsValid(board)
             && board.All(IsFilled);
+
+    public static int RandomBot(Board board)
+    {
+        var moves = AllPossibleMoves(board);
+        return moves.ElementAt(Random.Shared.Next(moves.Count()));
+    }
+
+    private static int HumanPlayer(Board board)
+    {
+        var possibleMoves = AllPossibleMoves(board);
+        Console.Clear();
+        Print(board);
+        var input = PromptUser(possibleMoves);
+        while (!IsValidInput(input, possibleMoves))
+            input = PromptUser(possibleMoves);
+        return int.Parse(input) - 1;
+    }
+
+    private static void Print(Board b)
+        => Console.WriteLine($"""
+
+                 {b[0]} | {b[1]} | {b[2]}
+                ---+---+---
+                 {b[3]} | {b[4]} | {b[5]}
+                ---+---+---
+                 {b[6]} | {b[7]} | {b[8]}
+
+            """);
+
+    private static string PromptUser(IEnumerable<int> possibleMoves)
+    {
+        Console.Write($"Cell [{string.Join(",", possibleMoves.Select(m => m + 1))}]: ");
+        return Console.ReadLine();
+    }
+
+    public static bool IsValidInput(string input, IEnumerable<int> possibleMoves)
+    {
+        return int.TryParse(input, out var move) && possibleMoves.Contains(move-1);
+    }
 
     private static bool HasPlayerWon(char player, Board board, int[] line)
         => line
