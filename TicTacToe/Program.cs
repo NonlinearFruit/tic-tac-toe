@@ -1,4 +1,4 @@
-﻿namespace TicTacToe;
+namespace TicTacToe;
 
 public class Program
 {
@@ -16,34 +16,35 @@ public class Program
     }
 
     public static bool IsComplete(char[] board)
-    {
-        if (IsInvalid(board)) return true;
-        return board
-            .Where(c => c != nill)
-            .Distinct()
-            .Where(p => HasPlayerWon(p, board))
-            .Any() || IsCatsGame(board);
-    }
+        => IsInvalid(board)
+            || board
+                .Where(IsFilled)
+                .Distinct()
+                .Where(p => HasPlayerWon(p, board))
+                .Any()
+            || IsCatsGame(board);
 
     public static bool HasPlayerWon(char player, char[] board)
-    {
-        if (IsInvalid(board)) return false;
-        return Lines
-            .Where(l => HasPlayerWon(player, board, l))
-            .Any();
-    }
+        => IsValid(board)
+            && Lines
+                .Where(l => HasPlayerWon(player, board, l))
+                .Any();
 
     public static bool IsCatsGame(char[] board)
-    {
-        if (IsInvalid(board)) return false;
-        return board.Any() && board.All(c => c != nill);
-    }
+        => IsValid(board)
+            && board.All(IsFilled);
 
     private static bool HasPlayerWon(char player, char[] board, int[] line)
         => line
             .Select(i => board[i])
             .All(c => c == player);
 
+    private static bool IsFilled(char cell)
+        => cell != nill;
+
     private static bool IsInvalid(char[] board)
-        => board == null || board.Length != 9;
+        => !IsValid(board);
+
+    private static bool IsValid(char[] board)
+        => board?.Length == 9;
 }

@@ -1,4 +1,4 @@
-﻿namespace TicTacToe.Tests;
+namespace TicTacToe.Tests;
 
 public class ProgramTests
 {
@@ -85,8 +85,8 @@ public class ProgramTests
         }
 
         [Theory]
-        [InlineData(x)] 
-        [InlineData(o)] 
+        [InlineData(x)]
+        [InlineData(o)]
         public void finds_row_wins(char s)
         {
             Assert.True(Program.HasPlayerWon(s, [s, s, s, n, n, n, n, n, n]));
@@ -95,8 +95,8 @@ public class ProgramTests
         }
 
         [Theory]
-        [InlineData(x)] 
-        [InlineData(o)] 
+        [InlineData(x)]
+        [InlineData(o)]
         public void finds_column_wins(char s)
         {
             Assert.True(Program.HasPlayerWon(s, [s, n, n, s, n, n, s, n, n]));
@@ -105,8 +105,8 @@ public class ProgramTests
         }
 
         [Theory]
-        [InlineData(x)] 
-        [InlineData(o)] 
+        [InlineData(x)]
+        [InlineData(o)]
         public void finds_diagonal_wins(char s)
         {
             Assert.True(Program.HasPlayerWon(s, [s, n, n, n, s, n, n, n, s]));
