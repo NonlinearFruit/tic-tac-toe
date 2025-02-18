@@ -14,6 +14,44 @@ public class ProgramTests
     private static char[] CatsBoard = [x, o, x, o, x, o, o, x, o];
     private static char[] PartialBoard = [x, o, x, n, n, n, n, n, n];
 
+    public class PlayTheGame
+    {
+        private const char c = 'c';
+
+        [Fact]
+        public void determines_the_winner()
+        {
+            var xResult = Program.PlayTheGame(default, default, XBoard);
+            Assert.Equal(x, xResult.Winner);
+            Assert.Equal(XBoard, xResult.Board);
+
+            var oResult = Program.PlayTheGame(default, default, OBoard);
+            Assert.Equal(o, oResult.Winner);
+            Assert.Equal(OBoard, oResult.Board);
+
+            var cResult = Program.PlayTheGame(default, default, CatsBoard);
+            Assert.Equal(c, cResult.Winner);
+            Assert.Equal(CatsBoard, cResult.Board);
+        }
+
+        [Fact]
+        public void allows_players_to_play()
+        {
+            var xPlayer = FakePlayer(0,1,2);
+            var oPlayer = FakePlayer(3,7);
+
+            var result = Program.PlayTheGame(xPlayer, oPlayer);
+
+            Assert.Equal(x, result.Winner);
+        }
+
+        private Func<char[], int> FakePlayer(params int[] moves)
+        {
+            var m = moves.GetEnumerator();
+            return board => { m.MoveNext(); return (int) m.Current; };
+        }
+    }
+
     public class IsComplete
     {
         [Fact]
