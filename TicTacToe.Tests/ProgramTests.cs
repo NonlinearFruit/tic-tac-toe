@@ -2,17 +2,17 @@
 
 public class ProgramTests
 {
-    private const string n = null;
-    private const string x = "x";
-    private const string o = "o";
-    private static string[] DefaultBoard = default;
-    private static string[] EmptyBoard = [];
-    private static string[] MalformedBoard = [n];
-    private static string[] BlankBoard = [n, n, n, n, n, n, n, n, n];
-    private static string[] XBoard = [x, x, x, n, n, n, n, n, n];
-    private static string[] OBoard = [o, o, o, n, n, n, n, n, n];
-    private static string[] CatsBoard = [x, o, x, o, x, o, o, x, o];
-    private static string[] PartialBoard = [x, o, x, n, n, n, n, n, n];
+    private const char n = ' ';
+    private const char x = 'x';
+    private const char o = 'o';
+    private static char[] DefaultBoard = default;
+    private static char[] EmptyBoard = [];
+    private static char[] MalformedBoard = [n];
+    private static char[] BlankBoard = [n, n, n, n, n, n, n, n, n];
+    private static char[] XBoard = [x, x, x, n, n, n, n, n, n];
+    private static char[] OBoard = [o, o, o, n, n, n, n, n, n];
+    private static char[] CatsBoard = [x, o, x, o, x, o, o, x, o];
+    private static char[] PartialBoard = [x, o, x, n, n, n, n, n, n];
 
     public class IsComplete
     {
@@ -45,7 +45,7 @@ public class ProgramTests
         [Fact]
         public void board_is_complete_when_random_symbol_wins()
         {
-            var r = "random symbol";
+            var r = 'r';
             Assert.True(Program.IsComplete([r, r, r, n, n, n, n, n, n]));
         }
 
@@ -87,7 +87,7 @@ public class ProgramTests
         [Theory]
         [InlineData(x)] 
         [InlineData(o)] 
-        public void finds_row_wins(string s)
+        public void finds_row_wins(char s)
         {
             Assert.True(Program.HasPlayerWon(s, [s, s, s, n, n, n, n, n, n]));
             Assert.True(Program.HasPlayerWon(s, [n, n, n, s, s, s, n, n, n]));
@@ -97,7 +97,7 @@ public class ProgramTests
         [Theory]
         [InlineData(x)] 
         [InlineData(o)] 
-        public void finds_column_wins(string s)
+        public void finds_column_wins(char s)
         {
             Assert.True(Program.HasPlayerWon(s, [s, n, n, s, n, n, s, n, n]));
             Assert.True(Program.HasPlayerWon(s, [n, s, n, n, s, n, n, s, n]));
@@ -107,7 +107,7 @@ public class ProgramTests
         [Theory]
         [InlineData(x)] 
         [InlineData(o)] 
-        public void finds_diagonal_wins(string s)
+        public void finds_diagonal_wins(char s)
         {
             Assert.True(Program.HasPlayerWon(s, [s, n, n, n, s, n, n, n, s]));
             Assert.True(Program.HasPlayerWon(s, [n, n, s, n, s, n, s, n, n]));

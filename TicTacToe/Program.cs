@@ -2,6 +2,7 @@
 
 public class Program
 {
+    private const char nill = ' ';
     private static IEnumerable<int[]> Lines = new Dictionary<string, int[][]>
     {
         ["rows"] = [[0, 1, 2], [3, 4, 5], [6, 7, 8]],
@@ -14,17 +15,17 @@ public class Program
         Console.WriteLine("Hi");
     }
 
-    public static bool IsComplete(string[] board)
+    public static bool IsComplete(char[] board)
     {
         if (IsInvalid(board)) return true;
         return board
-            .Where(c => c is not null)
+            .Where(c => c != nill)
             .Distinct()
             .Where(p => HasPlayerWon(p, board))
             .Any() || IsCatsGame(board);
     }
 
-    public static bool HasPlayerWon(string player, string[] board)
+    public static bool HasPlayerWon(char player, char[] board)
     {
         if (IsInvalid(board)) return false;
         return Lines
@@ -32,17 +33,17 @@ public class Program
             .Any();
     }
 
-    public static bool IsCatsGame(string[] board)
+    public static bool IsCatsGame(char[] board)
     {
         if (IsInvalid(board)) return false;
-        return board.Any() && board.All(c => c is not null);
+        return board.Any() && board.All(c => c != nill);
     }
 
-    private static bool HasPlayerWon(string player, string[] board, int[] line)
+    private static bool HasPlayerWon(char player, char[] board, int[] line)
         => line
             .Select(i => board[i])
             .All(c => c == player);
 
-    private static bool IsInvalid(string[] board)
+    private static bool IsInvalid(char[] board)
         => board == null || board.Length != 9;
 }
