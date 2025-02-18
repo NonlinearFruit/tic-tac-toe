@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Board = char[];
 using Player = System.Func<char, char[], int>;
 
@@ -22,7 +23,7 @@ public static class Program
         Console.WriteLine(" <<press enter to start>>");
         Console.ReadLine();
         Console.Clear();
-        var result = PlayTheGame(HumanPlayer, RandomBot);
+        var result = PlayTheGame(HumanPlayer, MinimaxBot);
         Console.Clear();
         Print(result.Board);
         Console.WriteLine($"Winner: {result.Winner}");
@@ -40,21 +41,22 @@ public static class Program
             : HasPlayerWon('o', game.Board) ? new('o', game.Board)
             : IsCatsGame(game.Board) ? new('c', game.Board)
             : PlayTheGame(new(
-                        GetOpponent(game),
+                        GetOpponent(game.CurrentPlayer),
                         game.X,
                         game.O,
                         GetBoardWithNextMove(game)));
 
-    private static char GetOpponent(Game game)
-        => game.CurrentPlayer == 'x'
+    private static char GetOpponent(char symbol)
+        => symbol == 'x'
             ? 'o'
             : 'x';
 
     private static Board GetBoardWithNextMove(Game game)
     {
         var move = GetNextMove(game);
-        game.Board[move] = game.CurrentPlayer;
-        return game.Board;
+        var newBoard = (Board) game.Board.Clone();
+        newBoard[move] = game.CurrentPlayer;
+        return newBoard;
     }
 
     private static int GetNextMove(Game game)
@@ -94,6 +96,34 @@ public static class Program
     {
         var moves = AllPossibleMoves(board);
         return moves.ElementAt(Random.Shared.Next(moves.Count()));
+    }
+
+    public static int MinimaxBot(char mySymbol, Board board)
+    {
+        var moves = AllPossibleMoves(board);
+        var opponent = GetOpponent(mySymbol);
+        var orderedEnumerable = moves
+            .Select(m => new
+            {
+                Move = m,
+                Score = ScoreTheMove(mySymbol, board, m)
+            })
+            .OrderByDescending(o => o.Score)
+            .ToList();
+        return orderedEnumerable
+            .Select(o => o.Move)
+            .First();
+    }
+
+    private static int ScoreTheMove(char mySymbol, Board board, int move)
+    {
+        var opponent = GetOpponent(mySymbol);
+        var newBoard = (Board) board.Clone();
+        newBoard[move] = mySymbol;
+        var result = PlayTheGame(new(opponent, MinimaxBot, MinimaxBot, newBoard));
+        return result.Winner == mySymbol ? 1
+            : result.Winner == opponent ? -1
+            : 0;
     }
 
     private static int HumanPlayer(char mySymbol, Board board)

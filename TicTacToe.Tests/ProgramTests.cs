@@ -243,4 +243,23 @@ public class ProgramTests
             Assert.Contains(move, Program.AllPossibleMoves(PartialBoard));
         }
     }
+
+    public class MinimaxBot
+    {
+        [Fact]
+        public void chooses_a_valid_move()
+        {
+            var move = Program.MinimaxBot(x, PartialBoard);
+
+            Assert.Contains(move, Program.AllPossibleMoves(PartialBoard));
+        }
+
+        [Fact]
+        public void never_loses_to_random_bot()
+        {
+            var result = Program.PlayTheGame(Program.RandomBot, Program.MinimaxBot);
+
+            Assert.NotEqual(x, result.Winner);
+        }
+    }
 }
