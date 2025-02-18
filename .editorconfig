@@ -1,0 +1,15 @@
+root = true
+
+[*]
+indent_style = space
+insert_final_newline = true
+end_of_line = lf
+trim_trailing_whitespace = true
+
+[*.cs]
+dotnet_sort_system_directives_first = true
+csharp_style_namespace_declarations = file_scoped:warning
+# This one requires an IDE <https://github.com/dotnet/format/issues/1623>
+dotnet_style_namespace_match_folder = true:warning
+# Remove unused usings
+dotnet_diagnostic.IDE0005.severity = warning

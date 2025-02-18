@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Board = char[];
 using Player = System.Func<char, char[], int>;
 
@@ -54,7 +53,7 @@ public static class Program
     private static Board GetBoardWithNextMove(Game game)
     {
         var move = GetNextMove(game);
-        var newBoard = (Board) game.Board.Clone();
+        var newBoard = (Board)game.Board.Clone();
         newBoard[move] = game.CurrentPlayer;
         return newBoard;
     }
@@ -68,7 +67,7 @@ public static class Program
     {
         if (IsInvalid(board)) return Array.Empty<int>();
         return board
-            .Select((c,i) => new { Index = i, Cell = c })
+            .Select((c, i) => new { Index = i, Cell = c })
             .Where(o => o.Cell == Nil)
             .Select(o => o.Index)
             .ToList();
@@ -117,7 +116,7 @@ public static class Program
     private static int ScoreTheMove(char mySymbol, Board board, int move)
     {
         var opponent = GetOpponent(mySymbol);
-        var newBoard = (Board) board.Clone();
+        var newBoard = (Board)board.Clone();
         newBoard[move] = mySymbol;
         var result = PlayTheGame(new(opponent, MinimaxBot, MinimaxBot, newBoard));
         return result.Winner == mySymbol ? 1
@@ -155,7 +154,7 @@ public static class Program
 
     public static bool IsValidInput(string input, IEnumerable<int> possibleMoves)
     {
-        return int.TryParse(input, out var move) && possibleMoves.Contains(move-1);
+        return int.TryParse(input, out var move) && possibleMoves.Contains(move - 1);
     }
 
     private static bool HasPlayerWon(char player, Board board, int[] line)

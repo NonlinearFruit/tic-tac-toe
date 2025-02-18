@@ -37,8 +37,8 @@ public class ProgramTests
         [Fact]
         public void allows_players_to_play()
         {
-            var xPlayer = FakePlayer(0,1,2);
-            var oPlayer = FakePlayer(3,7);
+            var xPlayer = FakePlayer(0, 1, 2);
+            var oPlayer = FakePlayer(3, 7);
 
             var result = Program.PlayTheGame(xPlayer, oPlayer);
 
@@ -48,7 +48,7 @@ public class ProgramTests
         private Func<char, char[], int> FakePlayer(params int[] moves)
         {
             var m = moves.GetEnumerator();
-            return (_, _) => { m.MoveNext(); return (int) m.Current!; };
+            return (_, _) => { m.MoveNext(); return (int)m.Current!; };
         }
     }
 
@@ -66,7 +66,7 @@ public class ProgramTests
         {
             var moves = Program.AllPossibleMoves(BlankBoard);
 
-            Assert.Equal(Enumerable.Range(0,9), moves);
+            Assert.Equal(Enumerable.Range(0, 9), moves);
         }
 
         [Fact]
