@@ -1,3 +1,4 @@
+using Board = char[];
 using Player = System.Func<char[], int>;
 
 namespace TicTacToe;
@@ -5,8 +6,9 @@ namespace TicTacToe;
 public class Program
 {
     private const char nill = ' ';
-    public record GameResult(char Winner, char[] Board);
-    private record Game(Player CurrentPlayer, Player X, Player O, char[] Board);
+    public record GameResult(char Winner, Board Board);
+    private record Game(Player CurrentPlayer, Player X, Player O, Board Board);
+    private static Board BlankBoard = [nill, nill, nill, nill, nill, nill, nill, nill, nill];
     private static IEnumerable<int[]> Lines = new Dictionary<string, int[][]>
     {
         ["rows"] = [[0, 1, 2], [3, 4, 5], [6, 7, 8]],
@@ -19,12 +21,12 @@ public class Program
         Console.WriteLine("Hi");
     }
 
-    public static GameResult PlayTheGame(Player x, Player o, char[] board = null)
+    public static GameResult PlayTheGame(Player x, Player o, Board board = null)
         => PlayTheGame(new(
                     x,
                     x,
                     o,
-                    board ?? [nill, nill, nill, nill, nill, nill, nill, nill, nill]));
+                    board ?? BlankBoard));
 
     private static GameResult PlayTheGame(Game game)
         => HasPlayerWon('x', game.Board) ? new('x', game.Board)
@@ -41,7 +43,7 @@ public class Program
             ? game.X
             : game.O;
 
-    private static char[] GetBoardWithNextMove(Game game)
+    private static Board GetBoardWithNextMove(Game game)
     {
         var move = game.CurrentPlayer(game.Board);
         game.Board[move] = GetCurrentSymbol(game);
@@ -53,7 +55,7 @@ public class Program
             ? 'x'
             : 'o';
 
-    public static bool IsComplete(char[] board)
+    public static bool IsComplete(Board board)
         => IsInvalid(board)
             || board
                 .Where(IsFilled)
@@ -62,17 +64,17 @@ public class Program
                 .Any()
             || IsCatsGame(board);
 
-    public static bool HasPlayerWon(char player, char[] board)
+    public static bool HasPlayerWon(char player, Board board)
         => IsValid(board)
             && Lines
                 .Where(l => HasPlayerWon(player, board, l))
                 .Any();
 
-    public static bool IsCatsGame(char[] board)
+    public static bool IsCatsGame(Board board)
         => IsValid(board)
             && board.All(IsFilled);
 
-    private static bool HasPlayerWon(char player, char[] board, int[] line)
+    private static bool HasPlayerWon(char player, Board board, int[] line)
         => line
             .Select(i => board[i])
             .All(c => c == player);
@@ -80,9 +82,9 @@ public class Program
     private static bool IsFilled(char cell)
         => cell != nill;
 
-    private static bool IsInvalid(char[] board)
+    private static bool IsInvalid(Board board)
         => !IsValid(board);
 
-    private static bool IsValid(char[] board)
+    private static bool IsValid(Board board)
         => board?.Length == 9;
 }
