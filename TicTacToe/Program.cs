@@ -1,5 +1,5 @@
 using Board = char[];
-using Player = System.Func<char[], int>;
+using Player = System.Func<char, char[], int>;
 
 namespace TicTacToe;
 
@@ -59,8 +59,8 @@ public static class Program
 
     private static int GetNextMove(Game game)
         => game.CurrentPlayer == 'x'
-            ? game.X(game.Board)
-            : game.O(game.Board);
+            ? game.X(game.CurrentPlayer, game.Board)
+            : game.O(game.CurrentPlayer, game.Board);
 
     public static IEnumerable<int> AllPossibleMoves(Board board)
     {
@@ -90,13 +90,13 @@ public static class Program
         => IsValid(board)
             && board.All(IsFilled);
 
-    public static int RandomBot(Board board)
+    public static int RandomBot(char mySymbol, Board board)
     {
         var moves = AllPossibleMoves(board);
         return moves.ElementAt(Random.Shared.Next(moves.Count()));
     }
 
-    private static int HumanPlayer(Board board)
+    private static int HumanPlayer(char mySymbol, Board board)
     {
         var possibleMoves = AllPossibleMoves(board);
         Console.Clear();

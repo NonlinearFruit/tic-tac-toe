@@ -45,10 +45,10 @@ public class ProgramTests
             Assert.Equal(x, result.Winner);
         }
 
-        private Func<char[], int> FakePlayer(params int[] moves)
+        private Func<char, char[], int> FakePlayer(params int[] moves)
         {
             var m = moves.GetEnumerator();
-            return board => { m.MoveNext(); return (int) m.Current; };
+            return (_, _) => { m.MoveNext(); return (int) m.Current; };
         }
     }
 
@@ -238,7 +238,7 @@ public class ProgramTests
         [Fact]
         public void chooses_a_valid_move()
         {
-            var move = Program.RandomBot(PartialBoard);
+            var move = Program.RandomBot(x, PartialBoard);
 
             Assert.Contains(move, Program.AllPossibleMoves(PartialBoard));
         }
