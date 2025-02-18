@@ -5,10 +5,10 @@ namespace TicTacToe;
 
 public class Program
 {
-    private const char nill = ' ';
+    private const char nil = ' ';
     public record GameResult(char Winner, Board Board);
     private record Game(Player CurrentPlayer, Player X, Player O, Board Board);
-    private static Board BlankBoard = [nill, nill, nill, nill, nill, nill, nill, nill, nill];
+    private static Board BlankBoard = [nil, nil, nil, nil, nil, nil, nil, nil, nil];
     private static IEnumerable<int[]> Lines = new Dictionary<string, int[][]>
     {
         ["rows"] = [[0, 1, 2], [3, 4, 5], [6, 7, 8]],
@@ -55,6 +55,15 @@ public class Program
             ? 'x'
             : 'o';
 
+    public static IEnumerable<int> AllPossibleMoves(Board board)
+    {
+        if (IsInvalid(board)) return Array.Empty<int>();
+        return board
+            .Select((c,i) => new { Index = i, Cell = c })
+            .Where(o => o.Cell == nil)
+            .Select(o => o.Index);
+    }
+
     public static bool IsComplete(Board board)
         => IsInvalid(board)
             || board
@@ -80,7 +89,7 @@ public class Program
             .All(c => c == player);
 
     private static bool IsFilled(char cell)
-        => cell != nill;
+        => cell != nil;
 
     private static bool IsInvalid(Board board)
         => !IsValid(board);

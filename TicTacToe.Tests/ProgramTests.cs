@@ -52,6 +52,41 @@ public class ProgramTests
         }
     }
 
+    public class AllPossibleMoves
+    {
+        [Fact]
+        public void degenerate_boards_have_no_possible_moves()
+        {
+            Assert.Empty(Program.AllPossibleMoves(DefaultBoard));
+            Assert.Empty(Program.AllPossibleMoves(EmptyBoard));
+        }
+
+        [Fact]
+        public void blank_board_has_all_possible_moves()
+        {
+            var moves = Program.AllPossibleMoves(BlankBoard);
+
+            Assert.Equal(Enumerable.Range(0,9), moves);
+        }
+
+        [Fact]
+        public void cats_board_has_no_possible_moves()
+        {
+            var moves = Program.AllPossibleMoves(CatsBoard);
+
+            Assert.Empty(moves);
+        }
+
+        [Fact]
+        public void partially_filled_board_some_possible_moves()
+        {
+            var moves = Program.AllPossibleMoves(PartialBoard);
+
+            Assert.True(moves.Count() < 9, "Too many moves");
+            Assert.True(moves.Count() > 0, "Too few moves");
+        }
+    }
+
     public class IsComplete
     {
         [Fact]
