@@ -6,11 +6,11 @@ namespace TicTacToe;
 
 public static class Program
 {
-    private const char nil = ' ';
+    private const char Nil = ' ';
     public record GameResult(char Winner, Board Board);
     private record Game(char CurrentPlayer, Player X, Player O, Board Board);
-    private static Board BlankBoard = [nil, nil, nil, nil, nil, nil, nil, nil, nil];
-    private static IEnumerable<int[]> Lines = new Dictionary<string, int[][]>
+    private static readonly Board BlankBoard = [Nil, Nil, Nil, Nil, Nil, Nil, Nil, Nil, Nil];
+    private static readonly IEnumerable<int[]> Lines = new Dictionary<string, int[][]>
     {
         ["rows"] = [[0, 1, 2], [3, 4, 5], [6, 7, 8]],
         ["columns"] = [[0, 3, 6], [1, 4, 7], [2, 5, 8]],
@@ -64,13 +64,14 @@ public static class Program
             ? game.X(game.CurrentPlayer, game.Board)
             : game.O(game.CurrentPlayer, game.Board);
 
-    public static IEnumerable<int> AllPossibleMoves(Board board)
+    public static ICollection<int> AllPossibleMoves(Board board)
     {
         if (IsInvalid(board)) return Array.Empty<int>();
         return board
             .Select((c,i) => new { Index = i, Cell = c })
-            .Where(o => o.Cell == nil)
-            .Select(o => o.Index);
+            .Where(o => o.Cell == Nil)
+            .Select(o => o.Index)
+            .ToList();
     }
 
     public static bool IsComplete(Board board)
@@ -78,15 +79,13 @@ public static class Program
             || board
                 .Where(IsFilled)
                 .Distinct()
-                .Where(p => HasPlayerWon(p, board))
-                .Any()
+                .Any(p => HasPlayerWon(p, board))
             || IsCatsGame(board);
 
     public static bool HasPlayerWon(char player, Board board)
         => IsValid(board)
             && Lines
-                .Where(l => HasPlayerWon(player, board, l))
-                .Any();
+                .Any(l => HasPlayerWon(player, board, l));
 
     public static bool IsCatsGame(Board board)
         => IsValid(board)
@@ -95,7 +94,7 @@ public static class Program
     public static int RandomBot(char mySymbol, Board board)
     {
         var moves = AllPossibleMoves(board);
-        return moves.ElementAt(Random.Shared.Next(moves.Count()));
+        return moves.ElementAt(Random.Shared.Next(moves.Count));
     }
 
     public static int MinimaxBot(char mySymbol, Board board)
@@ -165,7 +164,7 @@ public static class Program
             .All(c => c == player);
 
     private static bool IsFilled(char cell)
-        => cell != nil;
+        => cell != Nil;
 
     private static bool IsInvalid(Board board)
         => !IsValid(board);

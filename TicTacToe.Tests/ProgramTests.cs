@@ -2,35 +2,35 @@ namespace TicTacToe.Tests;
 
 public class ProgramTests
 {
-    private const char n = ' ';
-    private const char x = 'x';
-    private const char o = 'o';
-    private static char[] DefaultBoard = default;
-    private static char[] EmptyBoard = [];
-    private static char[] MalformedBoard = [n];
-    private static char[] BlankBoard = [n, n, n, n, n, n, n, n, n];
-    private static char[] XBoard = [x, x, x, n, n, n, n, n, n];
-    private static char[] OBoard = [o, o, o, n, n, n, n, n, n];
-    private static char[] CatsBoard = [x, o, x, o, x, o, o, x, o];
-    private static char[] PartialBoard = [x, o, x, n, n, n, n, n, n];
+    private const char N = ' ';
+    private const char X = 'x';
+    private const char O = 'o';
+    private static readonly char[] DefaultBoard = default;
+    private static readonly char[] EmptyBoard = [];
+    private static readonly char[] MalformedBoard = [N];
+    private static readonly char[] BlankBoard = [N, N, N, N, N, N, N, N, N];
+    private static readonly char[] XBoard = [X, X, X, N, N, N, N, N, N];
+    private static readonly char[] OBoard = [O, O, O, N, N, N, N, N, N];
+    private static readonly char[] CatsBoard = [X, O, X, O, X, O, O, X, O];
+    private static readonly char[] PartialBoard = [X, O, X, N, N, N, N, N, N];
 
     public class PlayTheGame
     {
-        private const char c = 'c';
+        private const char C = 'c';
 
         [Fact]
         public void determines_the_winner()
         {
             var xResult = Program.PlayTheGame(default, default, XBoard);
-            Assert.Equal(x, xResult.Winner);
+            Assert.Equal(X, xResult.Winner);
             Assert.Equal(XBoard, xResult.Board);
 
             var oResult = Program.PlayTheGame(default, default, OBoard);
-            Assert.Equal(o, oResult.Winner);
+            Assert.Equal(O, oResult.Winner);
             Assert.Equal(OBoard, oResult.Board);
 
             var cResult = Program.PlayTheGame(default, default, CatsBoard);
-            Assert.Equal(c, cResult.Winner);
+            Assert.Equal(C, cResult.Winner);
             Assert.Equal(CatsBoard, cResult.Board);
         }
 
@@ -42,13 +42,13 @@ public class ProgramTests
 
             var result = Program.PlayTheGame(xPlayer, oPlayer);
 
-            Assert.Equal(x, result.Winner);
+            Assert.Equal(X, result.Winner);
         }
 
         private Func<char, char[], int> FakePlayer(params int[] moves)
         {
             var m = moves.GetEnumerator();
-            return (_, _) => { m.MoveNext(); return (int) m.Current; };
+            return (_, _) => { m.MoveNext(); return (int) m.Current!; };
         }
     }
 
@@ -82,8 +82,8 @@ public class ProgramTests
         {
             var moves = Program.AllPossibleMoves(PartialBoard);
 
-            Assert.True(moves.Count() < 9, "Too many moves");
-            Assert.True(moves.Count() > 0, "Too few moves");
+            Assert.True(moves.Count < 9, "Too many moves");
+            Assert.True(moves.Count > 0, "Too few moves");
         }
     }
 
@@ -119,7 +119,7 @@ public class ProgramTests
         public void board_is_complete_when_random_symbol_wins()
         {
             var r = 'r';
-            Assert.True(Program.IsComplete([r, r, r, n, n, n, n, n, n]));
+            Assert.True(Program.IsComplete([r, r, r, N, N, N, N, N, N]));
         }
 
         [Fact]
@@ -140,50 +140,50 @@ public class ProgramTests
         [Fact]
         public void degenerate_boards_are_not_won()
         {
-            Assert.False(Program.HasPlayerWon(x, DefaultBoard));
-            Assert.False(Program.HasPlayerWon(x, EmptyBoard));
-            Assert.False(Program.HasPlayerWon(x, MalformedBoard));
+            Assert.False(Program.HasPlayerWon(X, DefaultBoard));
+            Assert.False(Program.HasPlayerWon(X, EmptyBoard));
+            Assert.False(Program.HasPlayerWon(X, MalformedBoard));
         }
 
         [Fact]
         public void blank_board_is_not_won()
         {
-            Assert.False(Program.HasPlayerWon(x, BlankBoard));
+            Assert.False(Program.HasPlayerWon(X, BlankBoard));
         }
 
         [Fact]
         public void partial_board_is_not_won()
         {
-            Assert.False(Program.HasPlayerWon(x, PartialBoard));
+            Assert.False(Program.HasPlayerWon(X, PartialBoard));
         }
 
         [Theory]
-        [InlineData(x)]
-        [InlineData(o)]
+        [InlineData(X)]
+        [InlineData(O)]
         public void finds_row_wins(char s)
         {
-            Assert.True(Program.HasPlayerWon(s, [s, s, s, n, n, n, n, n, n]));
-            Assert.True(Program.HasPlayerWon(s, [n, n, n, s, s, s, n, n, n]));
-            Assert.True(Program.HasPlayerWon(s, [n, n, n, n, n, n, s, s, s]));
+            Assert.True(Program.HasPlayerWon(s, [s, s, s, N, N, N, N, N, N]));
+            Assert.True(Program.HasPlayerWon(s, [N, N, N, s, s, s, N, N, N]));
+            Assert.True(Program.HasPlayerWon(s, [N, N, N, N, N, N, s, s, s]));
         }
 
         [Theory]
-        [InlineData(x)]
-        [InlineData(o)]
+        [InlineData(X)]
+        [InlineData(O)]
         public void finds_column_wins(char s)
         {
-            Assert.True(Program.HasPlayerWon(s, [s, n, n, s, n, n, s, n, n]));
-            Assert.True(Program.HasPlayerWon(s, [n, s, n, n, s, n, n, s, n]));
-            Assert.True(Program.HasPlayerWon(s, [n, n, s, n, n, s, n, n, s]));
+            Assert.True(Program.HasPlayerWon(s, [s, N, N, s, N, N, s, N, N]));
+            Assert.True(Program.HasPlayerWon(s, [N, s, N, N, s, N, N, s, N]));
+            Assert.True(Program.HasPlayerWon(s, [N, N, s, N, N, s, N, N, s]));
         }
 
         [Theory]
-        [InlineData(x)]
-        [InlineData(o)]
+        [InlineData(X)]
+        [InlineData(O)]
         public void finds_diagonal_wins(char s)
         {
-            Assert.True(Program.HasPlayerWon(s, [s, n, n, n, s, n, n, n, s]));
-            Assert.True(Program.HasPlayerWon(s, [n, n, s, n, s, n, s, n, n]));
+            Assert.True(Program.HasPlayerWon(s, [s, N, N, N, s, N, N, N, s]));
+            Assert.True(Program.HasPlayerWon(s, [N, N, s, N, s, N, s, N, N]));
         }
     }
 
@@ -238,7 +238,7 @@ public class ProgramTests
         [Fact]
         public void chooses_a_valid_move()
         {
-            var move = Program.RandomBot(x, PartialBoard);
+            var move = Program.RandomBot(X, PartialBoard);
 
             Assert.Contains(move, Program.AllPossibleMoves(PartialBoard));
         }
@@ -249,7 +249,7 @@ public class ProgramTests
         [Fact]
         public void chooses_a_valid_move()
         {
-            var move = Program.MinimaxBot(x, PartialBoard);
+            var move = Program.MinimaxBot(X, PartialBoard);
 
             Assert.Contains(move, Program.AllPossibleMoves(PartialBoard));
         }
@@ -259,7 +259,7 @@ public class ProgramTests
         {
             var result = Program.PlayTheGame(Program.RandomBot, Program.MinimaxBot);
 
-            Assert.NotEqual(x, result.Winner);
+            Assert.NotEqual(X, result.Winner);
         }
     }
 }
