@@ -45,3 +45,7 @@ NOTE: The cell numbers are as follows:
 ```
 
 NOTE: When the winner is `c` that is a draw or cat's game
+
+# Related
+
+- [NonlinearFruit/ultimate-tic-tac-toe](https://github.com/NonlinearFruit/ultimate-tic-tac-toe)
