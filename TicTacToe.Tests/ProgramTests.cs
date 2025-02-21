@@ -43,6 +43,7 @@ public class ProgramTests
             var result = Program.PlayTheGame(xPlayer, oPlayer);
 
             Assert.Equal(X, result.Winner);
+            Assert.Equal([X, X, X, O, N, N, N, O, N], result.Board);
         }
 
         private Func<char, char[], int> FakePlayer(params int[] moves)
