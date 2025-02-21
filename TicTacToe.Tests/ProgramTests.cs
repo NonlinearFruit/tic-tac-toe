@@ -247,6 +247,8 @@ public class ProgramTests
 
     public class MinimaxBot
     {
+        private const char C = 'c';
+
         [Fact]
         public void chooses_a_valid_move()
         {
@@ -261,6 +263,14 @@ public class ProgramTests
             var result = Program.PlayTheGame(Program.RandomBot, Program.MinimaxBot);
 
             Assert.NotEqual(X, result.Winner);
+        }
+
+        [Fact]
+        public void always_draws_itself()
+        {
+            var result = Program.PlayTheGame(Program.MinimaxBot, Program.MinimaxBot);
+
+            Assert.Equal(C, result.Winner);
         }
     }
 }
